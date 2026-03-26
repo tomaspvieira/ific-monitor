@@ -1,0 +1,44 @@
+name: IFIC IA nas PME — Daily Monitor
+
+on:
+  schedule:
+      - cron: "0 8 * * *"
+        workflow_dispatch:
+
+        jobs:
+          check:
+              runs-on: ubuntu-latest
+                  permissions:
+                        contents: write
+
+                            steps:
+                                  - name: Checkout repository
+                                          uses: actions/checkout@v4
+
+                                                - name: Set up Python
+                                                        uses: actions/setup-python@v5
+                                                                with:
+                                                                          python-version: "3.11"
+
+                                                                                - name: Restore previous state
+                                                                                        run: |
+                                                                                                  mkdir -p data
+                                                                                                            echo "State file present: $(ls data/ 2>/dev/null || echo 'none yet')"
+                                                                                                            
+                                                                                                                  - name: Run monitor
+                                                                                                                          env:
+                                                                                                                                    SMTP_HOST: smtp.gmail.com
+                                                                                                                                              SMTP_PORT: "587"
+                                                                                                                                                        SMTP_USER: ${{ secrets.SMTP_USER }}
+                                                                                                                                                                  SMTP_PASS: ${{ secrets.SMTP_PASS }}
+                                                                                                                                                                            NOTIFY_EMAIL: ${{ secrets.NOTIFY_EMAIL }}
+                                                                                                                                                                                    run: python monitor.py
+                                                                                                                                                                                    
+                                                                                                                                                                                          - name: Commit updated state
+                                                                                                                                                                                                  if: always()
+                                                                                                                                                                                                          run: |
+                                                                                                                                                                                                                    git config user.name "IFIC Monitor Bot"
+                                                                                                                                                                                                                              git config user.email "actions@github.com"
+                                                                                                                                                                                                                                        git add data/state.json
+                                                                                                                                                                                                                                                  git diff --staged --quiet || git commit -m "chore: update monitor state $(date -u +'%Y-%m-%d')"
+                                                                                                                                                                                                                                                            git push
