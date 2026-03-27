@@ -163,6 +163,7 @@ def analyse_target(target, state):
 
 # --- Email ---
 
+
 def send_email(results):
     smtp_host = os.environ.get("SMTP_HOST", "smtp.gmail.com")
     smtp_port = int(os.environ.get("SMTP_PORT", "587"))
@@ -197,10 +198,22 @@ def send_email(results):
         if r.get("positive_found"):
             lines.append(f"<p><strong>Palavras-chave encontradas:</strong> {', '.join(r['positive_found'])}</p>")
         lines.append("<hr>")
-    lines.append(
+
+    lines += [
+        "<h3>O que fazer agora</h3>",
+        "<ol>",
+        "<li><strong>Abra os links acima</strong> e confirme que a lista de beneficiários está publicada.</li>",
+        "<li><strong>Descarregue a lista completa</strong> em formato CSV aqui:<br>",
+        "<a href=\"https://transparencia.gov.pt/pt/fundos-europeus/prr/pesquisar/beneficiario/?investments=C05-i14\">",
+        "transparencia.gov.pt → Beneficiários PRR → filtrar C05-i14</a><br>",
+        "Clique no botão <em>\"Descarregar dados abertos\"</em> no fundo da página.</li>",
+        "<li><strong>Filtre por componente C05-i14</strong> para ver apenas as empresas do IA nas PME.</li>",
+        "<li>O CSV terá: nome da empresa, NIF, montante aprovado, região — a sua lista de prospects.</li>",
+        "</ol>",
+        "<hr>",
         "<p><em>Este monitor desactivou-se automaticamente. "
-        "Nao recebera mais emails desta ferramenta.</em></p>"
-    )
+        "Nao recebera mais emails desta ferramenta.</em></p>",
+    ]
 
     msg = MIMEMultipart("alternative")
     msg["Subject"] = subject
