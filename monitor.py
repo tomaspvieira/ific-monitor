@@ -225,6 +225,25 @@ def main():
     print(f"Run time: {datetime.now(timezone.utc).isoformat()}")
     print("=" * 60)
 
+    test_mode = os.environ.get("TEST_MODE", "").lower() == "true"
+
+    if test_mode:
+        print("\nTEST MODE - forcing alert to verify email delivery")
+        results = [
+            {
+                "name": "TEST - Recuperar Portugal",
+                "url": "https://recuperarportugal.gov.pt/candidatura/03-linha-ia-nas-pme-aviso-n-o-03-c05-i14-01-2025/",
+                "status": "RESULTS_LIKELY_PUBLISHED (TEST)",
+                "alert": True,
+                "changed": True,
+                "positive_found": ["resultados", "aprovados"],
+                "negative_found": [],
+            }
+        ]
+        send_email(results)
+        print("\nTest complete. Check your inbox.")
+        return
+
     state = load_state()
     results = [analyse_target(t, state) for t in TARGETS]
     save_state(state)
