@@ -2,16 +2,19 @@ name: IFIC IA nas PME — Daily Monitor
 
 on:
   schedule:
-    # Runs every day at 08:00 UTC (09:00 Lisbon time in winter, 10:00 in summer)
     - cron: "0 8 * * *"
   workflow_dispatch:
-    # Allows you to trigger manually from the GitHub Actions tab
+    inputs:
+      test_mode:
+        description: 'Send a test email to verify delivery (true/false)'
+        required: false
+        default: 'false'
 
 jobs:
   check:
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # needed to commit state file back to repo
+      contents: write
 
     steps:
       - name: Checkout repository
@@ -23,8 +26,6 @@ jobs:
           python-version: "3.11"
 
       - name: Restore previous state
-        # The state file is committed back to the repo after each run
-        # so we always have the previous hash to compare against
         run: |
           mkdir -p data
           echo "State file present: $(ls data/ 2>/dev/null || echo 'none yet')"
@@ -37,10 +38,11 @@ jobs:
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
           NOTIFY_EMAIL: ${{ secrets.NOTIFY_EMAIL }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TEST_MODE: ${{ github.event.inputs.test_mode || 'false' }}
         run: python monitor.py
 
       - name: Commit updated state
-        if: always()  # commit state even if the script exits with code 1 (alert)
+        if: always()
         run: |
           git config user.name "IFIC Monitor Bot"
           git config user.email "actions@github.com"
