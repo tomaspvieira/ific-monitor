@@ -1,8 +1,8 @@
 {
   "https://recuperarportugal.gov.pt/candidatura/03-linha-ia-nas-pme-aviso-n-o-03-c05-i14-01-2025/": {
-    "hash": "98b18aacddecde036b52e3572181c7b99bb92d14a28c246ee40bf3aed0441d5f",
-    "last_checked": "2026-04-12T10:05:39.187447+00:00",
-    "last_status": "no_change",
+    "hash": "7461d7f4d1d01a4bc15b6754400743a4e5d277d244084d985862c5c68b2920cc",
+    "last_checked": "2026-04-13T11:57:02.080925+00:00",
+    "last_status": "content_changed_no_results_yet",
     "positive_keywords_found": [],
     "negative_keywords_found": [
       "fechado",
@@ -11,8 +11,8 @@
     ]
   },
   "https://transparencia.gov.pt/pt/fundos-europeus/prr/pesquisar/beneficiario/?investments=C05-i14": {
-    "hash": "8a7f988d4f621597b63e9bd5a89be4312bf9aa957d322de4d26b3d2b48a73511",
-    "last_checked": "2026-04-12T10:05:48.251477+00:00",
+    "hash": "681b50ea9a2173bd1e01269dbeac33a27b2270f4cb6b030d42e9369d3adf806e",
+    "last_checked": "2026-04-13T11:57:11.120306+00:00",
     "last_status": "content_changed_no_results_yet",
     "positive_keywords_found": [
       "C05-i14"
